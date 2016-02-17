@@ -1,0 +1,77 @@
+<div id="page-wrapper">
+  <div class="row">
+      <div class="col-lg-12">
+          <h1 class="page-header">添加队部</h1>
+      </div>
+      <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">队部表单</div>
+        <!-- alerts-container -->
+        <div id="alerts-container"></div>
+        <div class="panel-body">
+          <form role="form" ng-submit="saveTeam(team)">
+            <div class="row">
+              <div class="col-lg-3">
+                <div class="form-group">
+                  <label>名称</label>
+                  <input class="form-control" placeholder="昵称" ng-model="team.name" required>
+                </div>
+                <div class="form-group">
+                  <label>城市</label>
+                  <input class="form-control" placeholder="城市" ng-model="team.city" required>
+                </div>
+                <div class="form-group">
+                  <label>队部描述</label>
+                  <textarea rows="10" class="form-control" name="desc" ng-model="team.desc"></textarea>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="form-group">
+                  <label>是否公开</label>
+                  <button type="button" class="btn btn-default form-control" ng-model="team.isPublic" bs-checkbox>公开</button>
+                </div>
+                <div class="form-group">
+                  <label>官网首页推荐</label>
+                  <button type="button" class="btn btn-default form-control" ng-model="team.isRecommend" bs-checkbox>推荐</button>
+                </div>
+                <div class="form-group">
+                  <label>队标 </label><small> {{progress}}</small>
+                  <input type="file" ngf-select ngf-change="upload($files)" ngf-multiple="multiple">
+                  <img ng-show="logo != ''" ng-src="{{logo}}" class="img-thumbnail" height="50" width="100">
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="form-group">
+                  <label>运动项目</label>
+                  <div ng-repeat="e in eventList.events">
+                    <input type="checkbox" checklist-model="team.events" checklist-value="e._id"> {{e.name}}
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="form-group">
+                  <label>队长</label>
+                  <div ng-repeat="u in userList.users">
+                    <input type="radio" name="captain" ng-model="team.captain" ng-value="u._id"> {{u.nickname}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" class="form-control" ng-model="logo" value="{{logo}}">
+            <button type="submit" class="btn btn-primary">添加</button>
+          </form>
+          <!-- /.row (nested) -->
+        </div>
+        <!-- /.panel-body -->
+      </div>
+      <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->

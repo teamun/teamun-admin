@@ -1,0 +1,57 @@
+<div id="page-wrapper">
+  <div class="row">
+      <div class="col-lg-12">
+          <h1 class="page-header">菜单添加</h1>
+      </div>
+      <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <form role="form" ng-submit="saveMenu(menu)">
+                <div class="form-group">
+                  <label>菜单名称</label>
+                  <input class="form-control" placeholder="菜单名称" name="name" ng-model="menu.name">
+                </div>
+                <div class="form-group">
+                  <label>菜单链接</label>
+                  <input class="form-control" placeholder="url" name="url" ng-model="menu.url">
+                </div>
+                <div class="form-group">
+                  <label>FontAwesome-Icon</label>
+                  <input class="form-control" placeholder="icon" name="icon" ng-model="menu.icon">
+                </div>
+                <div class="form-group">
+                  <label>选择父菜单</label>
+                  <select id="disabledSelect" name="parent" class="form-control" ng-model="menu.parent">
+                    <option value="">-- 默认父菜单 --</option>
+                    <option ng-repeat="item in parentList" value="{{item._id}}">{{item.name}}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>菜单级别</label>
+                  <select class="form-control" ng-model="menu.level" value="{{menu.level}}" required>
+                    <option value="0">父菜单</option>
+                    <option value="1">子菜单</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-default">添加</button>
+                <a class="btn btn-default btn-sm" ui-sref="admin.menu-list">返回</a>
+              </form>
+            </div>
+          </div>
+          <!-- /.row (nested) -->
+        </div>
+        <!-- /.panel-body -->
+      </div>
+      <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->

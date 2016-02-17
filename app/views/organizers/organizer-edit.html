@@ -1,0 +1,93 @@
+<div id="page-wrapper">
+  <div class="row">
+      <div class="col-lg-12">
+          <h1 class="page-header">主办单位编辑</h1>
+      </div>
+      <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">主办单位表单</div>
+        <!-- alerts-container -->
+        <div id="alerts-container"></div>
+        <div class="panel-body">
+          <form role="form" ng-submit="updateOrganizer(organizer)">
+            <div class="row">
+              <div class="col-lg-4">
+                <label>主办单位名称</label>
+                <div class="form-group">
+                  <input class="form-control" placeholder="运动项目" ng-model="organizer.name" required>
+                </div>
+                <div class="form-group">
+                  <label>主办单位描述</label>
+                  <textarea rows="10" class="form-control" placeholder="剪短描述" ng-model="organizer.desc"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>类型 &nbsp;&nbsp;</label>
+                  <label class="radio-inline">
+                    <input type="radio" name="type" ng-model="type" value="organize" > 组织
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="type" ng-model="type" value="presonal"> 个人
+                  </label>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label>Logo </label><small> {{selectPosterFiles[0].progress.p}}%</small>
+                  <input type="file" ngf-select ngf-change="uploadlogo($files)" ngf-multiple="multiple">
+                  <img ng-show="logo" ng-src="{{logo}}" class="img-thumbnail" height="50" width="100">
+                </div>
+              </div>
+              <div class="col-lg-4" ng-show="organizer.type[0] == 'organize'">
+                <div class="form-group">
+                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addCaptainModal">
+                    添加领队
+                  </button>
+                </div>
+                <dl ng-repeat="captain in organizer.captains">
+                    <dd>{{captain.nickname}}  <button type="button" class="btn btn-warning btn-xs" ng-click="removeCaptain(captain);">删除</button></dd>
+                </dl>
+              </div>
+            </div>
+            <input type="hidden" class="form-control" ng-model="logo" value="{{logo}}">
+            <button type="submit" class="btn btn-primary">更新</button>
+            <button type="button" class="btn btn-default" ui-sref="admin.organizer-list">返回</button>
+          </form>
+          <!-- /.row (nested) -->
+        </div>
+        <!-- /.panel-body -->
+      </div>
+      <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+
+<div class="modal fade" id="addCaptainModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form role="form" ng-submit="addOrganizerCaptain(organizer)">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">添加领队</h4>
+        </div>
+        <div class="modal-body">
+          <label>用户列表</label>
+          <select class="form-control" ng-model="organizer.captain">
+            <option value="">-- 请选择 --</option>
+            <option ng-repeat="item in captains" value="{{item._id}}">{{item.nickname}}</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

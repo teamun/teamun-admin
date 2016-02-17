@@ -1,0 +1,231 @@
+<div id="page-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">完善活动分组信息</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+    <div class="col-lg-6">
+      <dl class="dl-horizontal">
+        <dt>活动名称:</dt>
+        <dd>{{activity.name}}</dd>
+        <dt>开始时间:</dt>
+        <dd>{{activity.startTime | date: 'yyyy-MM-dd HH:mm:ss'}}</dd>
+        <dt>海报:</dt>
+        <dd><img ng-src="{{activity.poster}}" class="img-thumbnail" height="50" width="100"></dd>
+        <dt>头图:</dt>
+        <dd>
+          <div ng-show="activity.headerImgs != null">
+            <img ng-repeat="header in activity.headerImgs" ng-src="{{header}}" class="img-thumbnail" height="50" width="100">
+          </div>
+        </dd>
+        <dt>尾图:</dt>
+        <dd>
+          <div ng-show="activity.footerImgs != null">
+            <img ng-repeat="footer in activity.footerImgs" ng-src="{{footer}}" class="img-thumbnail" height="50" width="100">
+          </div>
+        </dd>
+        <dt>城市:</dt>
+        <dd>{{activity.city}}</dd>
+        <dt>详细地址:</dt>
+        <dd>{{activity.location}}</dd>
+        <dt>经度:</dt>
+        <dd>{{activity.longitude}}</dd>
+        <dt>纬度:</dt>
+        <dd>{{activity.latitude}}</dd>
+        <dt>项目:</dt>
+        <dd>{{activity.event.name}}</dd>
+        <dt>概要:</dt>
+        <dd>{{activity.summary}}</dd>
+        <dt>描述:</dt>
+        <dd>{{activity.desc}}</dd>
+        <dt>难度级别:</dt>
+        <dd>{{activity.level}} 星</dd>
+        <dt>发布用户:</dt>
+        <dd>{{activity.user.nickname}}</dd>
+        <dt>联系电话:</dt>
+        <dd>{{activity.mobile}}</dd>
+        <dt>是否提供保险:</dt>
+        <dd>{{activity.isSafe === true ? '是' : '否'}}</dd>
+        <dt>是否需要真实信息:</dt>
+        <dd>{{activity.isRealInfo === true ? '是' : '否'}}</dd>
+        <dt>是否发起签到:</dt>
+        <dd>{{activity.isSignIn === true ? '是' : '否'}}</dd>
+        <dt>官网推荐:</dt>
+        <dd>{{activity.isRecommend === true ? '是' : '否'}}</dd>
+        <dt>是否填写紧急联系人:</dt>
+        <dd>{{activity.isEmergencyContact === true ? '是' : '否'}}</dd>
+        <dt>隐私设置:</dt>
+        <dd>{{activity.type === 0 ? '公开' : '私密'}}</dd>
+        <dt>活动状态:</dt>
+        <dd>{{activityStatusMap[activity.status]}}</dd>
+      </dl>
+    </div>
+
+    <div class="col-lg-6">
+      <dl class="dl-horizontal" ng-repeat="group in activityGroups">
+        <dt>分组名称:</dt>
+        <dd>{{group.name}}</dd>
+        <dt>报名人数:</dt>
+        <dd>{{group.numLimit}}</dd>
+        <dt>报名费用:</dt>
+        <dd>{{group.entryFee}}</dd>
+        <dt>费用说明:</dt>
+        <dd>{{group.feeDesc}}</dd>
+        <dt>开始时间:</dt>
+        <dd>{{group.signTime | date: 'yyyy-MM-dd HH:mm:ss'}}</dd>
+        <dt>结束时间:</dt>
+        <dd>{{group.deadlineTime | date: 'yyyy-MM-dd HH:mm:ss'}}</dd>
+        <dt>状态:</dt>
+        <dd>{{activityGroupStatusMap[group.status]}}</dd>
+        <dt>操作:</dt>
+        <dd>
+          <button type="button" class="btn btn-default" ng-click="editGroup(group._id);">编辑</button>
+          <button type="button" class="btn btn-default" ng-click="removeGroup(group);">删除</button>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <!-- /.row -->
+  <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#activityGroupModal">添加分组</a>
+  <a class="btn btn-warning btn-sm" ui-sref="admin.activity-list">取消</a>
+  <a class="btn btn-success btn-sm" ng-click="publishGroup(activity);">发布</a>
+</div>
+<!-- /#page-wrapper -->
+<!-- 弹出层 -->
+<div class="modal fade bs-example-modal-lg" id="activityGroupModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="padding-top:10%;">
+  <div class="col-lg-2"></div>
+  <div class="form-group col-lg-8" id="activitygroup" style="border-radius:10px; padding:30px; background:#fff;">
+    <label><i class="fa fa-users"></i>分组信息</label>
+    <form role="form" ng-submit="saveActivityGroup(activityGroup)">
+      <div class="table-responsive" name="group">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th width="50%">报名项目</th>
+              <th width="16%">报名人数</th>
+              <th width="16%">报名费用</th>
+              <!-- <th>操作</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input class="form-control" placeholder="分组名称" name="name" ng-model="activityGroup.name" required>
+              </td>
+              <td>
+                <input class="form-control" placeholder="0为不限制" name="numLimit" ng-model="activityGroup.numLimit" required>
+              </td>
+              <td>
+                <input class="form-control" placeholder="0为免费" name="entryFee" ng-model="activityGroup.entryFee" required>
+              </td>
+              <!-- <td>
+                <button type="button" class="btn btn-default" ng-click="delgroup(this);">删除</button>
+              </td> -->
+            </tr>
+            <tr>
+              <td colspan="4">
+                费用说明：
+                <input class="form-control" placeholder="" name="feeDesc" ng-model="activityGroup.feeDesc" required>
+                <br/>
+                <div class="form-group">
+                  <label class="control-label"><i class="fa fa-calendar"></i> 报名开始时间</label>
+                  <br>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="10" class="form-control" ng-model="signTime" data-max-date="{{deadlineTime}}" data-autoclose="1" placeholder="Date" bs-datepicker required>
+                  </div>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="8" class="form-control" ng-model="signTime" data-max-date="{{deadlineTime}}" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label"><i class="fa fa-calendar"></i> 报名截止时间</label>
+                  <br>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="10" class="form-control" ng-model="deadlineTime" data-min-date="{{signTime}}" data-autoclose="1" placeholder="Date" bs-datepicker required>
+                  </div>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="8" class="form-control" ng-model="deadlineTime" data-min-date="{{signTime}}" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="submit" class="btn btn-default">提交</button>
+      <button type="reset" class="btn btn-default">重置</button>
+    </form>
+  </div>
+  <!-- /#activitygroup -->
+</div>
+<!-- /弹出层 -->
+
+
+<!-- 更新弹出层 -->
+<div class="modal fade bs-example-modal-lg" id="updateActivityGroupModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="padding-top:10%;">
+  <div class="col-lg-2"></div>
+  <div class="form-group col-lg-8" id="activitygroup" style="border-radius:10px; padding:30px; background:#fff;">
+    <label><i class="fa fa-users"></i>分组信息</label>
+    <form role="form" ng-submit="updateActivityGroup(activityGroup)">
+      <div class="table-responsive" name="group">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th width="50%">报名项目</th>
+              <th width="16%">报名人数</th>
+              <th width="16%">报名费用</th>
+              <!-- <th>操作</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input class="form-control" placeholder="分组名称" name="name" ng-model="activityGroup.name" required>
+              </td>
+              <td>
+                <input class="form-control" placeholder="0为不限制" name="numLimit" ng-model="activityGroup.numLimit" required>
+              </td>
+              <td>
+                <input class="form-control" placeholder="0为免费" name="entryFee" ng-model="activityGroup.entryFee" required>
+              </td>
+              <!-- <td>
+                <button type="button" class="btn btn-default" ng-click="delgroup(this);">删除</button>
+              </td> -->
+            </tr>
+            <tr>
+              <td colspan="4">
+                费用说明：
+                <input class="form-control" placeholder="" name="feeDesc" ng-model="activityGroup.feeDesc" required>
+                <br/>
+                <div class="form-group">
+                  <label class="control-label"><i class="fa fa-calendar"></i> 报名开始时间</label>
+                  <br>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="10" class="form-control" ng-model="signTime" data-max-date="{{deadlineTime}}" data-autoclose="1" placeholder="Date" bs-datepicker required>
+                  </div>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="8" class="form-control" ng-model="signTime" data-max-date="{{deadlineTime}}" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label"><i class="fa fa-calendar"></i> 报名截止时间</label>
+                  <br>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="10" class="form-control" ng-model="deadlineTime" data-min-date="{{signTime}}" data-autoclose="1" placeholder="Date" bs-datepicker required>
+                  </div>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="8" class="form-control" ng-model="deadlineTime" data-min-date="{{signTime}}" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="submit" class="btn btn-default">提交</button>
+      <button type="reset" class="btn btn-default">重置</button>
+    </form>
+  </div>
+  <!-- /#activitygroup -->
+</div>
+<!-- /弹出层 -->

@@ -1,0 +1,208 @@
+<div id="page-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">编辑活动</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <!-- alerts-container -->
+        <div id="alerts-container"></div>
+        <!-- ngModel is optional -->
+        <div class="panel-group" bs-collapse>
+          <form role="form" ng-submit="updateActivity(activity)">
+            <div class="panel panel-default">
+              <div class="panel-collapse" bs-collapse-target>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="form-group">
+                        <div class="form-group col-lg-6">
+                          <label>标题</label>
+                          <input class="form-control" placeholder="Title" name="name" ng-model="activity.name" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                          <label>活动项目</label>
+                          <select id="disabledSelect" name="event" class="form-control" ng-model="activity.event">
+                            <option value="">-- 请选择 --</option>
+                            <option ng-repeat="item in events" value="{{item._id}}">{{item.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="form-group col-lg-6">
+                          <label>活动难度</label>
+                          <select class="form-control" name="level" ng-model="activity.level" >
+                            <option value="">-- 请选择 --</option>
+                            <option value="1">1星</option>
+                            <option value="2">2星</option>
+                            <option value="3">3星</option>
+                            <option value="4">4星</option>
+                            <option value="5">5星</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                          <label>联系人电话</label>
+                          <input class="form-control" placeholder="联系人电话" name="mobile" ng-model="activity.mobile" required>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> 活动时间 <small>开始时间</small></label>
+                        <br>
+                        <div class="form-group col-xs-6">
+                          <input type="text" size="10" class="form-control" ng-model="startTime" data-autoclose="1" placeholder="Date" bs-datepicker>
+                        </div>
+                        <div class="form-group col-xs-6">
+                          <input type="text" size="8" class="form-control" ng-model="startTime" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                        </div>
+                        <!-- <div class="form-group col-xs-6">
+                          <div class="form-group">
+                            <input type="text" class="form-control" ng-model="startTime" data-max-date="{{endTime}}" data-autoclose="1" placeholder="Date" bs-datepicker>
+                          </div>
+                          <div class="form-group">
+                            <input type="text" size="8" class="form-control" ng-model="startTime" data-max-date="{{endTime}}" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                          </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                          <div class="form-group">
+                            <input type="text" class="form-control" ng-model="endTime" data-min-date="{{startTime}}" data-autoclose="1" placeholder="Date" bs-datepicker>
+                          </div>
+                          <div class="form-group">
+                            <input type="text" size="8" class="form-control" ng-model="endTime" data-min-date="{{startTime}}" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                          </div>
+                        </div> -->
+                      </div>
+                      <div class="form-group">
+                          <div class="form-group col-lg-6">
+                            <div class="form-group">
+                              <label>活动概要</label>
+                              <textarea rows="3" class="form-control" name="summary" ng-model="activity.summary"></textarea>
+                            </div>
+                            <div class="form-group">
+                              <label>活动描述</label>
+                              <textarea rows="10" class="form-control" name="desc" ng-model="activity.desc"></textarea>
+                            </div>
+                            <br/>
+                            <div class="form-group">
+                              <label>是否提供运动保险 &nbsp;&nbsp;</label>
+                              <label class="radio-inline">
+                                <input type="radio" name="isSafe" id="isSafe1" ng-model="isSafe" ng-value="true"> 是
+                              </label>
+                              <label class="radio-inline">
+                                <input type="radio" name="isSafe" id="isSafe2" ng-model="isSafe" ng-value="false"> 否
+                              </label>
+                            </div>
+                            <div class="form-group">
+                              <label>紧急联系人 &nbsp;&nbsp;</label>
+                              <label class="radio-inline">
+                                <input type="radio" name="isEmergencyContact" id="isEmergencyContact1" ng-model="isEmergencyContact" ng-value="true"> 是
+                              </label>
+                              <label class="radio-inline">
+                                <input type="radio" name="isEmergencyContact" id="isEmergencyContact2" ng-model="isEmergencyContact" ng-value="false"> 否
+                              </label>
+                            </div>
+                            <div class="form-group">
+                              <label>是否需要真实信息&nbsp;</label>
+                              <small>(选择“是”需要用户提交真实姓名、身份证号、联系电话信息)</small>&nbsp;&nbsp;
+                              <label class="radio-inline">
+                                <input type="radio" name="isRealInfo" id="isRealInfo1" value=true ng-model="isRealInfo" ng-value="true"> 是
+                              </label>
+                              <label class="radio-inline">
+                                <input type="radio" name="isRealInfo" id="isRealInfo2" value=false ng-model="isRealInfo" ng-value="false"> 否
+                              </label>
+                            </div>
+                            <div class="form-group">
+                              <label>隐私设置 &nbsp;&nbsp;</label>
+                              <label class="radio-inline">
+                                <input type="radio" name="type" id="publicActivity" ng-model="type" value="0"> 公开活动
+                              </label>
+                              <label class="radio-inline">
+                                <input type="radio" name="type" id="privateActivity" ng-model="type" value="1"> 私密活动
+                              </label>
+                            </div>
+                            <br/>
+                            <div class="form-group col-lg-6" style="padding-left: 0;">
+                              <label>官网首页推荐</label>
+                              <button type="button" class="btn btn-default form-control" ng-model="activity.isRecommend" bs-checkbox>推荐</button>
+                            </div>
+                            <div class="form-group col-lg-6" style="padding-right: 0;">
+                              <label>是否发起签到</label>
+                              <button type="button" class="btn btn-default form-control" ng-model="activity.isSignIn" bs-checkbox>发起签到</button>
+                            </div>
+                            <!-- <div class="form-group">
+                              <label>人数限制&nbsp;&nbsp;</label>
+                              <label class="radio-inline">
+                                <input type="radio" name="numLimit" id="numLimit1" value="0" ng-model="numLimit"> 不限
+                              </label>
+                              <label class="radio-inline">
+                                <input type="radio" name="numLimit" id="numLimit2" value="1" ng-model="numLimit"> 限制
+                              </label>
+                              <label class="radio-inline" ng-show="numLimit != '0'">
+                                <input class="form-control" placeholder="人数" name="numLimit" ng-init="0" ng-model="activity.numLimit">
+                              </label>
+                            </div> -->
+                            <div class="form-group">
+                                <div class="form-group col-lg-6" style="padding-left: 0;">
+                                  <label>主办单位</label>
+                                  <select class="form-control" ng-model="activity.organizer" data-ng-options="organizer._id as organizer.name for organizer in organizers" ng-change="selectOrganize(activity.organizer)">
+                                      <option value="">-- 请选择 --</option>
+                                  </select>
+                                </div>
+                                <div class="form-group col-lg-6" style="padding-right: 0;">
+                                  <label>活动领队</label>
+                                  <select class="form-control" ng-model="activity.captain" data-ng-options="captain._id as captain.nickname for captain in captains">
+                                      <option value="">-- 请选择 --</option>
+                                  </select>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="form-group col-lg-6">
+                            <baidu-map map-style="stt" map-options="ops" city="city" longitude="longitude1" latitude="latitude1"></baidu-map>
+                            <div class="form-group">
+                              <input type="text" class="form-control" placeholder="城市" name="cityName" ng-model="cityName">
+                              <!-- <select class="form-control" ng-options="city as city.name for city in cities" ng-model="activity.city" ></select> -->
+                            </div>
+                            <div class="input-group">
+                              <input type="text" class="form-control" placeholder="活动地点" name="location" ng-model="location">
+                              <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="area()">Go!</button>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group col-lg-6">
+                            <label>活动海报 {{selectPosterFiles[0].progress.p}}% </label>
+                            <input type="file" id="uploadposter" ngf-select ngf-change="uploadposter($files)">
+                            <img ng-show="poster != ''" ng-src="{{poster}}" class="img-thumbnail" height="50" width="100">
+                            <input class="form-control" type="hidden" name="poster" ng-model="activity.poster" ng-init="activity.poster = poster">
+                          </div>
+                          <div class="form-group col-lg-6">
+                            <label>上传头图 {{selectHeaderImgFiles[0].progress.p}}% </label>
+                            <input type="file" id="uploadheader" ngf-select ngf-multiple="true" ngf-change="uploadheader($files)">
+                            <div ng-show="headerImgs != null">
+                              <img ng-repeat="header in headerImgs" ng-src="{{header}}" class="img-thumbnail" height="50" width="100">
+                            </div>
+                          </div>
+                          <div class="form-group col-lg-6 pull-right">
+                            <label>上传尾图 {{selectFooterImgFiles[0].progress.p}}%</label>
+                            <input type="file" id="uploadfooter" ngf-select ngf-multiple="true" ngf-change="uploadfooter($files)">
+                            <div ng-show="footerImgs != null">
+                              <img ng-repeat="footer in footerImgs" ng-src="{{footer}}" class="img-thumbnail" height="50" width="100">
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-default">提交</button>
+            <button type="reset" class="btn btn-default">重置</button>
+          </form>
+        </div>
+      </div>
+      <!-- /.panel -->
+    </div>
+  </div>
+</div>

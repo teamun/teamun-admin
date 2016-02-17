@@ -1,0 +1,122 @@
+<div id="page-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">活动列表</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+    <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <p>
+        <a href="#" ui-sref="admin.activity-add" class="btn btn-primary">添加活动</a>
+      </p>
+      <div class="panel panel-default">
+        <!-- /.panel-heading -->
+        <!-- <div class="panel-heading">
+          <form  name="datepickerForm" class="form-inline" role="form" ng-submit="queryActivity(searchModel)">
+              <table class="table table-striped table-bordered">
+                <tr class="odd gradeX">
+                  <td width="5%"><label>性质:</label></td>
+                  <td width="25%">
+                    <select class="form-control" ng-model="activity.type" required>
+                          <option value="">-- 请选择 --</option>
+                          <option value="1">免费</option>
+                          <option value="2">付费</option>
+                      </select>
+                  </td>
+                  <td width="5%"><label>状态:</label></td>
+                  <td width="25%">
+                    <select class="form-control" ng-model="activity.status" required>
+                          <option value="">-- 请选择 --</option>
+                          <option value="1">报名中</option>
+                          <option value="2">进行中</option>
+                          <option value="3">已结束</option>
+                          <option value="4">已取消</option>
+                      </select>
+                  </td>
+                  <td width="5%"><label>地点:</label></td>
+                  <td width="25%">
+                    <select class="form-control" ng-model="activity.location" required>
+                          <option value="">-- 请选择 --</option>
+                          <option value="admin">北京</option>
+                      </select>
+                  </td>
+                </tr>
+                <tr class="odd gradeX">
+                  <td width="7%"><label>注册时间:</label></td>
+                  <td width="25%" colspan="5">
+                      <i class="fa fa-calendar"></i> 
+                      <input class="form-control" ui-date ng-model="searchModel.startTime" placeholder="开始时间" data-autoclose="1" bs-datepicker="" date-format="yyyy/MM/dd" max-date="{{search.endTime}}">
+                      <i class="fa fa-arrows-h"></i>
+                      <i class="fa fa-calendar"></i>
+                      <input class="form-control" ui-date ng-model="searchModel.endTime" placeholder="结束时间" data-autoclose="1" bs-datepicker="" date-format="yyyy/MM/dd" min-date="{{search.startTime}}">
+                      <button type="submit" class="btn btn-default">查询</button>
+                  </td>
+                </tr>
+              </table>
+          </form>
+        </div> -->
+        <div class="panel-body">
+          <div class="form-group">
+            <input class="form-control" ng-model="query" placeholder="过滤所有字段">
+          </div>
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+              <thead>
+                <tr>
+                  <th>Logo</th>
+                  <th>活动名称</th>
+                  <th>开始时间</th>
+                  <th>状态</th>
+                  <th>类型</th>
+                  <th>地区</th>
+                  <th>创建时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd gradeX" ng-repeat="item in list.data.activities | filter: query">
+                  <td><img ng-src="{{item.poster}}?imageMogr2/thumbnail/50x50!" class="img-thumbnail" width="50"></td>
+                  <td>
+                    <div style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width:200px;">
+                      {{item.name}} 
+                    </div>
+                  </td>
+                  <td>{{item.startTime | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                  <td>{{list.data.statusMap[item.status]}}</td>
+                  <td>{{item.type === 0 ? '公开' : '私密'}}</td>
+                  <td>{{item.city}}</td>
+                  <td>{{item.meta.createAt | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                  <td>
+                    <a class="btn btn-default btn-sm" ui-sref="admin.activity-detail({activity_id: item._id})">活动详情</a>
+                    <a class="btn btn-default btn-sm" ui-sref="admin.activity-group-members({ activity_id: item._id })">报名成员</a>
+                    <a ng-show="item.isRecommend === false" class="btn btn-success btn-sm" ng-click="recommendAdd(item._id)">官网推荐</a>
+                    <a ng-show="item.isRecommend === true" class="btn btn-warning btn-sm" ng-click="recommendRemove(item._id)">取消推荐</a>
+                    <a class="btn btn-danger btn-sm" ng-click="remove(item._id)">删除</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <bgf-pagination
+                page="page"
+                per-page="perPage"
+                client-limit="clientLimit"
+                url="'api/admin/activities'"
+                link-group-size="2"
+                url-params="urlParams"
+                collection="list"
+                template-url="/views/tpl/paginate-anything.html"
+                >
+            </bgf-pagination>
+          </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+      </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+</div>
+<!-- /#page-wrapper -->

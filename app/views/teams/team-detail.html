@@ -1,0 +1,36 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">队部详细信息</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+        <div>
+            <dl class="dl-horizontal">
+                <dt>队部名称:</dt>
+                <dd>{{team.name}}</dd>
+                <dt>LOGO:</dt>
+                <dd><img ng-src="{{team.logo}}" class="img-thumbnail" height="50" width="100"></dd>
+                <dt>创建时间:</dt>
+                <dd>{{team.meta.createAt | date: 'yyyy-MM-dd HH:mm:ss'}}</dd>
+                <dt>城市:</dt>
+                <dd>{{team.city}}</dd>
+                <dt>描述:</dt>
+                <dd>{{team.desc}}</dd>
+                <dt>是否公开:</dt>
+                <dd>{{team.isPublic === true ? '是' : '否'}}</dd>
+                <dt>是否首页推荐:</dt>
+                <dd>{{team.isRecommend === true ? '是' : '否'}}</dd>
+                <dt>队长:</dt>
+                <dd>{{team.captain[0].nickname}}</dd>
+                <dt>运动项目:</dt>
+                <dd ng-repeat="e in team.events">
+                    {{e.name}}
+                </dd>
+            </dl>
+            <a class="btn btn-default btn-sm" ui-sref="admin.team-list">返回</a>
+            <a class="btn btn-default btn-sm" ui-sref="admin.team-edit({ team_id: team._id })">编辑</a>
+        </div>
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->

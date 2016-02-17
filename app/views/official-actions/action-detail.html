@@ -1,0 +1,176 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">动态详细信息</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+        <div class="col-lg-6">
+            <dl class="dl-horizontal">
+                <dt>动态标题:</dt>
+                <dd>{{action.title}}</dd>
+                <dt>发布时间:</dt>
+                <dd>{{action.publishTime | date: 'yyyy-MM-dd HH:mm:ss'}}</dd>
+                <dt>海报:</dt>
+                <dd><img ng-src="{{action.poster}}" class="img-thumbnail" height="50" width="100"></dd>
+                <dt>发起单位:</dt>
+                <dd>{{action.source}}</dd>
+                <dt>URL:</dt>
+                <dd>{{action.url}}</dd>
+                <dt>是否需要提交真实信息:</dt>
+                <dd>{{action.isRealInfo ? '是' : '否'}}</dd>
+                <dt>状态:</dt>
+                <dd>{{action.status === 0 ? '待发布' : '已发布'}}</dd>
+                <dt>类型:</dt>
+                <dd>{{action.type === 0 ? '资讯' : '招募'}}</dd>
+                <dt>创建时间:</dt>
+                <dd>{{action.meta.createAt | date: 'yyyy-MM-dd HH:mm:ss'}}</dd>
+                <dt>更新时间:</dt>
+                <dd>{{action.meta.updateAt | date: 'yyyy-MM-dd HH:mm:ss'}}</dd>
+                <dt>内容</dt>
+                <dd><div ta-bind ng-model="action.content"></div></dd>
+            </dl>
+        </div>
+        
+		<div class="col-lg-6">
+		  <dl class="dl-horizontal" ng-repeat="group in recruitGroups">
+		    <dt>分组名称:</dt>
+		    <dd>{{group.name}}</dd>
+		    <dt>报名上限:</dt>
+		    <dd>{{group.numLimit}}人</dd>
+		    <dt>开始时间:</dt>
+		    <dd>{{group.signTime | date: 'yyyy-MM-dd HH:mm:ss'}}</dd>
+		    <dt>结束时间:</dt>
+		    <dd>{{group.deadlineTime | date: 'yyyy-MM-dd HH:mm:ss'}}</dd>
+		    <dt>状态:</dt>
+		    <dd>{{recruitGroupStatusMap[group.status]}}</dd>
+		    <dt>操作:</dt>
+		    <dd>
+		      <button type="button" class="btn btn-default" ng-click="editGroup(group._id);">编辑</button>
+		      <button type="button" class="btn btn-default" ng-click="removeGroup(group);">删除</button>
+		    </dd>
+		  </dl>
+		</div>
+    </div>
+    <!-- /.row -->
+    <a ng-show="action.type === 1" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#recruitGroupModal">添加招募分组</a>
+	<a class="btn btn-default btn-sm" ui-sref="admin.official-action-edit({ action_id: action._id })">修改</a>
+	<a class="btn btn-success btn-sm" ng-show="action.status === 0" ng-click="publishGroup(action);">发布</a>
+	<a class="btn btn-default btn-sm" ui-sref="admin.official-action-list">返回</a>
+</div>
+
+<!-- 弹出层 -->
+<div class="modal fade bs-example-modal-lg" id="recruitGroupModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="padding-top:10%;">
+  <div class="col-lg-2"></div>
+  <div class="form-group col-lg-8" id="recruitGroup" style="border-radius:10px; padding:30px; background:#fff;">
+    <label><i class="fa fa-users"></i>招募信息</label>
+    <form role="form" ng-submit="saveRecruitGroup(recruitGroup)">
+      <div class="table-responsive" name="group">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th width="50%">招募类型</th>
+              <th width="16%">报名人数</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input class="form-control" placeholder="分组名称" name="name" ng-model="recruitGroup.name" required>
+              </td>
+              <td>
+                <input class="form-control" placeholder="0为不限制" name="numLimit" ng-model="recruitGroup.numLimit" required>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4">
+                <div class="form-group">
+                  <label class="control-label"><i class="fa fa-calendar"></i> 报名开始时间</label>
+                  <br>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="10" class="form-control" ng-model="signTime" data-autoclose="1" placeholder="Date" bs-datepicker required>
+                  </div>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="8" class="form-control" ng-model="signTime" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label"><i class="fa fa-calendar"></i> 报名截止时间</label>
+                  <br>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="10" class="form-control" ng-model="deadlineTime" data-autoclose="1" placeholder="Date" bs-datepicker required>
+                  </div>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="8" class="form-control" ng-model="deadlineTime" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="submit" class="btn btn-default">提交</button>
+      <button type="reset" class="btn btn-default">重置</button>
+    </form>
+  </div>
+  <!-- /#recruitGroup -->
+</div>
+<!-- /弹出层 -->
+
+
+<!-- 更新弹出层 -->
+<div class="modal fade bs-example-modal-lg" id="updateRecruitGroupModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="padding-top:10%;">
+  <div class="col-lg-2"></div>
+  <div class="form-group col-lg-8" id="recruitGroup" style="border-radius:10px; padding:30px; background:#fff;">
+    <label><i class="fa fa-users"></i>分组信息</label>
+    <form role="form" ng-submit="updateRecruitGroup(recruitGroup)">
+      <div class="table-responsive" name="group">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th width="50%">报名项目</th>
+              <th width="16%">报名人数</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input class="form-control" placeholder="分组名称" name="name" ng-model="recruitGroup.name" required>
+              </td>
+              <td>
+                <input class="form-control" placeholder="0为不限制" name="numLimit" ng-model="recruitGroup.numLimit" required>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4">
+                <div class="form-group">
+                  <label class="control-label"><i class="fa fa-calendar"></i> 报名开始时间</label>
+                  <br>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="10" class="form-control" ng-model="signTime" data-autoclose="1" placeholder="Date" bs-datepicker required>
+                  </div>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="8" class="form-control" ng-model="signTime" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label"><i class="fa fa-calendar"></i> 报名截止时间</label>
+                  <br>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="10" class="form-control" ng-model="deadlineTime" data-autoclose="1" placeholder="Date" bs-datepicker required>
+                  </div>
+                  <div class="form-group col-xs-6">
+                    <input type="text" size="8" class="form-control" ng-model="deadlineTime" data-time-format="HH:mm" data-autoclose="1" placeholder="Time" bs-timepicker>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="submit" class="btn btn-default">提交</button>
+      <button type="reset" class="btn btn-default">重置</button>
+    </form>
+  </div>
+  <!-- /#recruitGroup -->
+</div>
+<!-- /弹出层 -->

@@ -1,0 +1,58 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">用户详细信息</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+        <div>
+            <dl class="dl-horizontal">
+                <dt>昵称:</dt>
+                <dd>{{user.nickname}}</dd>
+                <dt>头像:</dt>
+                <dd><img ng-src="{{user.avatar}}" class="img-thumbnail" height="50" width="100"></dd>
+                <dt>手机:</dt>
+                <dd>{{user.mobile}}</dd>
+                <dt>Email:</dt>
+                <dd>{{user.email}}</dd>
+                <dt>角色:</dt>
+                <dd>{{user.roles[0]}}</dd>
+                <dt>创建时间:</dt>
+                <dd>{{user.meta.createAt | date: 'yyyy-MM-dd HH:mm:ss'}}</dd>
+                <!-- <dt>参与队部:</dt>
+                <dd ng-repeat="t in user.teams">
+                    {{t.name}}
+                </dd> -->
+                <dt>标签:</dt>
+                <dd ng-repeat="tag in tags">
+                    {{tag}}
+                    <button type="button" class="btn btn-default btn-sm" ng-click="removeTag(tag);">删除</button>
+                </dd>
+            </dl>
+            <a class="btn btn-default btn-sm" ui-sref="admin.user-list">返回</a>
+            <a class="btn btn-default btn-sm" ui-sref="admin.user-edit({ user_id: user._id })">编辑</a>
+            <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#tagModal">添加标签</a>
+        </div>
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+
+
+<!-- 弹出层 -->
+<div class="modal fade bs-example-modal-lg" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="padding-top:10%;">
+    <div class="col-lg-2"></div>
+    <div class="form-group col-lg-2" id="activitygroup" style="border-radius:10px; padding:30px; background:#fff;">
+        <label><i class="fa fa-users"></i>添加标签</label>
+        <form role="form" ng-submit="addTag(tag)">
+            <div class="table-responsive" name="group">
+                <br/>
+                <input class="form-control" placeholder="标签" name="tag" ng-model="tag" required>
+                <br/>
+            </div>
+            <button type="submit" class="btn btn-default">提交</button>
+            <button type="reset" class="btn btn-default">重置</button>
+        </form>
+    </div>
+    <!-- /#activitygroup -->
+</div>
+<!-- /弹出层 -->
